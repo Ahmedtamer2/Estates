@@ -13,24 +13,16 @@ return new class extends Migration
     {
         Schema::create('settings', function (Blueprint $table) {
             $table->id();
-
-            // Header fields
             $table->string('header_title')->nullable();
             $table->text('header_description')->nullable();
             $table->string('header_image')->nullable();
-
-            // About Us fields
             $table->string('about_us_title')->nullable();
             $table->text('about_us_description')->nullable();
             $table->string('about_us_image1')->nullable();
             $table->string('about_us_image2')->nullable();
             $table->string('join_team_link')->nullable();
-
-            // Contact fields
             $table->string('email')->nullable();
             $table->string('phone')->nullable();
-
-            // Social Media fields
             $table->string('facebook')->nullable();
             $table->string('instagram')->nullable();
             $table->string('twitter')->nullable();

@@ -2,31 +2,18 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Helpers\ApiResponse;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Api\RegisterRequest;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use JWTAuth;
 use App\Models\User;
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
-    // Register
-    public function register(Request $request)
+    public function register(RegisterRequest $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6',
-        ]);
-
-        if ($validator->fails()) {
-            return response()->json([
-                'status' => 'error',
-                'errors' => $validator->errors()
-            ], 422);
-        }
-
         $user = User::create([
             'name'     => $request->name,
             'email'    => $request->email,
@@ -40,37 +27,34 @@ class AuthController extends Controller
             'token' => $token
         ];
 
-        return $data;
+        return ApiResponse::sendResponse(200, 'User registered successfully', $data);
     }
 
-    // Login
     public function login(Request $request)
     {
         $credentials = $request->only('email', 'password');
 
         if (!$token = JWTAuth::attempt($credentials)) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Invalid credentials'
-            ], 401);
+            return ApiResponse::sendResponse(401, 'Invalid credentials', null);
         }
 
-        return [
+        $data = [
             'user'  => auth()->user(),
             'token' => $token
         ];
+
+        return ApiResponse::sendResponse(200, 'Login successful', $data);
     }
 
-    // Logout
+
     public function logout()
     {
-        auth()->logout();
-        return ['message' => 'Logged out successfully'];
+        JWTAuth::invalidate(JWTAuth::getToken());
+        return ApiResponse::sendResponse(200, 'Logged out successfully', ['message' => 'Logged out successfully']);
     }
 
-    // Me
     public function me()
     {
-        return auth()->user();
+        return ApiResponse::sendResponse(200, 'User data retrieved successfully', auth()->user());
     }
 }

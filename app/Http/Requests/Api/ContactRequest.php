@@ -3,6 +3,9 @@
 namespace App\Http\Requests\Api;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Contracts\Validation\Validator;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use App\Helpers\ApiResponse;
 
 class ContactRequest extends FormRequest
 {
@@ -48,5 +51,17 @@ class ContactRequest extends FormRequest
       'adress.required' => 'The adress field is required.',
       'adress.string' => 'The adress must be a string.',
     ];
+  }
+
+  protected function failedValidation(Validator $validator)
+  {
+    throw new HttpResponseException(
+      ApiResponse::sendResponse(
+        422,
+        $validator->errors()->first(),
+        null,
+        $validator->errors()
+      )
+    );
   }
 }
