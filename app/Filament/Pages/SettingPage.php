@@ -25,7 +25,6 @@ class SettingPage extends Page implements Forms\Contracts\HasForms
     protected string $view = 'filament.pages.setting-page';
     public ?array $data = [];
 
-    // Form field properties
     public $header_title = '';
     public $header_description = '';
     public $header_image = null;
