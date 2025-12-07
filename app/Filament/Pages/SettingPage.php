@@ -25,10 +25,41 @@ class SettingPage extends Page implements Forms\Contracts\HasForms
     protected string $view = 'filament.pages.setting-page';
     public ?array $data = [];
 
+    // Form field properties
+    public $header_title = '';
+    public $header_description = '';
+    public $header_image = null;
+    public $about_us_title = '';
+    public $about_us_description = '';
+    public $about_us_image1 = null;
+    public $about_us_image2 = null;
+    public $join_team_link = '';
+    public $email = '';
+    public $phone = '';
+    public $facebook = '';
+    public $instagram = '';
+    public $twitter = '';
+    public $youtube = '';
+
     public function mount(): void
     {
         $setting = Setting::first();
-        $this->form->fill($setting ? $setting->toArray() : []);
+        $this->form->fill($setting ? $setting->toArray() : [
+            'header_title' => '',
+            'header_description' => '',
+            'header_image' => null,
+            'about_us_title' => '',
+            'about_us_description' => '',
+            'about_us_image1' => null,
+            'about_us_image2' => null,
+            'join_team_link' => '',
+            'email' => '',
+            'phone' => '',
+            'facebook' => '',
+            'instagram' => '',
+            'twitter' => '',
+            'youtube' => '',
+        ]);
     }
 
     protected function getFormSchema(): array
@@ -52,7 +83,6 @@ class SettingPage extends Page implements Forms\Contracts\HasForms
                                 ->label('Header Image')
                                 ->image()
                                 ->directory('settings')
-                                ->required(),
                         ]),
 
                     Tab::make('About Us')
@@ -70,14 +100,12 @@ class SettingPage extends Page implements Forms\Contracts\HasForms
                             FileUpload::make('about_us_image1')
                                 ->label('First Image')
                                 ->image()
-                                ->directory('settings')
-                                ->required(),
+                                ->directory('settings'),
 
                             FileUpload::make('about_us_image2')
                                 ->label('Second Image')
                                 ->image()
-                                ->directory('settings')
-                                ->required(),
+                                ->directory('settings'),
 
                             TextInput::make('join_team_link')
                                 ->label('Join Team Link')

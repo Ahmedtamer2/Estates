@@ -17,8 +17,6 @@ Route::group(['middleware' => 'auth:api'], function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
 });
 
-
-
 Route::prefix('v1')->group(function () {
     Route::get('estates', [EstateController::class, 'index']);
     Route::get('estates/{id}', [EstateController::class, 'show']);
